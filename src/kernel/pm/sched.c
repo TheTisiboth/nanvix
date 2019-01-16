@@ -98,22 +98,22 @@ PUBLIC void yield(void)
 		 * Process with higher
 		 * waiting time found.
 		 */
+		// on parcours tout les processus processus p
+		// next sera le processus que l'on choisira (priorite maximale)
+		// si on trouve un p qui attend depuis plus longtemps que next, on le choisit
+
 		if (p->counter > next->counter)
 		{
-			next->counter++;
+			next->counter-= (p->priority + p->nice);
 			next = p;
 		}
-			
-		/*
-		 * Increment waiting
-		 * time of process.
-		 */
+		// si on ne choisit pas de processus, on incremente son temps d'attente
 		else
-			p->counter++;
+			p->counter-= (p->priority + p->nice);
 	}
 	
 	/* Switch to next process. */
-	next->priority = PRIO_USER;
+	//next->priority = PRIO_USER;
 	next->state = PROC_RUNNING;
 	next->counter = PROC_QUANTUM;
 	switch_to(next);

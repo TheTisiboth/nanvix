@@ -98,18 +98,32 @@ PUBLIC void yield(void)
 		 * Process with higher
 		 * waiting time found.
 		 */
+		/*
 		if (p->counter > next->counter)
 		{
 			next->counter++;
 			next = p;
 		}
-			
+		*/
+
+		if (p->counter > next->counter)
+		{
+			// p a un counter plus elevé donc on choisis p
+			if (p->priority < next->priority)
+				// Mais la priorité de next etait superieur donc on incremente son counter
+				next->counter++;
+
+			next = p;
+		}	
 		/*
 		 * Increment waiting
 		 * time of process.
 		 */
-		else
-			p->counter++;
+		else 
+			// next a un counter superieur donc on garde next
+			if (p->priority > next->priority)
+				// La priorité de p est superieur alors on incremente le counter de p
+				p->counter++;
 	}
 	
 	/* Switch to next process. */

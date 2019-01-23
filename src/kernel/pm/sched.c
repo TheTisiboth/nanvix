@@ -99,11 +99,11 @@ PUBLIC void yield(void)
 		 * waiting time found.
 		*/
 		
-		if (forground != IDLE)
+		if (forground != NULL)
 		{
 			next = foreground;
 			foreground = foreground->next;
-		} else if(background != IDLE){
+		} else if(background != NULL){
 			next = background;
 			background = background->next;
 		} else exit(-1);

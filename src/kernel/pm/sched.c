@@ -93,14 +93,25 @@ PUBLIC void yield(void)
 		/* Skip non-ready process. */
 		if (p->state != PROC_READY)
 			continue;
+		
+		/*
+		 * Process with higher
+		 * waiting time found.
+		*/
+		/*
+		if (p->counter > next->counter)
+		{
+			next->counter++;
+			next = p;
+		}
+		*/
 
 		if (p->counter > next->counter)
 		{
 			// p a un counter plus elevé donc on choisis p
-			if (p->priority < next->priority)
+			if (p->priority + p->nice > next->priority + next->nice)
 				// Mais la priorité de next etait superieur donc on incremente son counter
 				next->counter++;
-
 			next = p;
 		}	
 		/*
@@ -109,13 +120,13 @@ PUBLIC void yield(void)
 		 */
 		else 
 			// next a un counter superieur donc on garde next
-			if (p->priority > next->priority)
+			if (p->priority + p->nice < next->priority + next->nice)
 				// La priorité de p est superieur alors on incremente le counter de p
 				p->counter++;
 	}
 	
 	/* Switch to next process. */
-	//next->priority = PRIO_USER;
+	next->priority = PRIO_USER;
 	next->state = PROC_RUNNING;
 	next->counter = PROC_QUANTUM;
 	switch_to(next);

@@ -73,7 +73,8 @@ PUBLIC void pm_init(void)
 {	
 	int i;             /* Loop index.      */
 	struct process *p; /* Working process. */
-	
+	foreground = IDLE;
+	background = IDLE;
 	/* Initialize the process table. */
 	for (p = FIRST_PROC; p <= LAST_PROC; p++)
 		p->flags = 0, p->state = PROC_DEAD;
@@ -122,6 +123,8 @@ PUBLIC void pm_init(void)
 	IDLE->chain = NULL;
 	
 	nprocs++;
+
+
 
 	enable_interrupts();
 }

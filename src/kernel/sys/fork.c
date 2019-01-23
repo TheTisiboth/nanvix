@@ -61,7 +61,7 @@ PUBLIC pid_t sys_fork(void)
 	
 	return (-EAGAIN);
 
-found:
+	found:
 	
 	/* Mark process as beeing created. */
 	proc->flags = 1 << PROC_NEW;
@@ -84,7 +84,7 @@ found:
 		/* Process region not in use. */
 		if (preg->reg == NULL)
 			continue;	
-			
+		
 		lockreg(preg->reg);
 		reg = dupreg(preg->reg);
 		unlockreg(preg->reg);
@@ -105,7 +105,7 @@ found:
 			freereg(reg);
 			goto error1;
 		}
-			
+		
 		unlockreg(reg);
 	}
 	
@@ -154,6 +154,20 @@ found:
 	proc->alarm = 0;
 	proc->next = NULL;
 	proc->chain = NULL;
+
+	process tmp;
+	if(proc->priority < PRIO_MEAN)
+		tmp = foreground;
+	else
+		tmp = background;
+	
+	while(tmp != NULL){
+		if(tmp->next != NULL){
+			tmp = tmp->next;
+		}
+		tmp->next = proc;
+	}
+
 	sched(proc);
 
 	curr_proc->nchildren++;
@@ -162,7 +176,7 @@ found:
 
 	return (proc->pid);
 
-error1:
+	error1:
 	/* Detach attached regions. */
 	while (--i >= 0)
 	{
@@ -175,7 +189,7 @@ error1:
 		lockreg(preg->reg);
 		detachreg(proc, preg);
 	}
-error0:
+	error0:
 	dstrypgdir(proc);
 	proc->flags = 0;
 	return (-ENOMEM);

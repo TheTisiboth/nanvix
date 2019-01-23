@@ -89,6 +89,7 @@
 	#define PRIO_TTY           0 /**< Waiting for terminal I/O.    */
 	#define PRIO_SIG          20 /**< Waiting for signal.          */
 	#define PRIO_USER         40 /**< User priority.               */
+	#define PRIO_MEAN		 -30	
 	/**@}*/
 
 	/**
@@ -279,6 +280,9 @@
 	EXTERN struct process *last_proc;
 	EXTERN pid_t next_pid;
 	EXTERN unsigned nprocs;
+
+	EXTERN struct process *foreground ;
+	EXTERN struct process *background ;
 
 #endif /* _ASM_FILE */
 

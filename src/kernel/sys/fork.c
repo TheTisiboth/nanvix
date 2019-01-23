@@ -84,7 +84,7 @@ PUBLIC pid_t sys_fork(void)
 		/* Process region not in use. */
 		if (preg->reg == NULL)
 			continue;	
-		
+
 		lockreg(preg->reg);
 		reg = dupreg(preg->reg);
 		unlockreg(preg->reg);
@@ -105,7 +105,7 @@ PUBLIC pid_t sys_fork(void)
 			freereg(reg);
 			goto error1;
 		}
-		
+
 		unlockreg(reg);
 	}
 	
@@ -155,12 +155,12 @@ PUBLIC pid_t sys_fork(void)
 	proc->next = NULL;
 	proc->chain = NULL;
 
-	process tmp;
+	struct process *tmp;
 	if(proc->priority < PRIO_MEAN)
 		tmp = foreground;
 	else
 		tmp = background;
-	
+
 	while(tmp != NULL){
 		if(tmp->next != NULL){
 			tmp = tmp->next;

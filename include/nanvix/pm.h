@@ -36,7 +36,7 @@
 	#include <sys/types.h>
 	#include <limits.h>
 	#include <signal.h>
-	
+
 	/**
 	 * @name Superuser credentials
 	 */
@@ -52,7 +52,7 @@
 	#define IDLE (&proctab[0]) /**< idle process. */
 	#define INIT (&proctab[1]) /**< init process. */
 	/**@}*/
-	
+
 	/**
 	 * @name Process table boundaries
 	 */
@@ -60,7 +60,7 @@
 	#define FIRST_PROC ((&proctab[1]))           /**< First process. */
 	#define LAST_PROC ((&proctab[PROC_MAX - 1])) /**< Last process.  */
 	/**@}*/
-	
+
 	/**
 	 * @name Process flags
 	 */
@@ -68,7 +68,7 @@
 	#define PROC_NEW 0 /**< Is the process new?     */
 	#define PROC_SYS 1 /**< Handling a system call? */
 	/**@}*/
-	
+
 	/**
 	 * @name Process parameters
 	 */
@@ -76,7 +76,7 @@
 	#define PROC_QUANTUM 50 /**< Quantum.                  */
 	#define NR_PREGIONS   4 /**< Number of memory regions. */
 	/**@}*/
-	
+
 	/**
 	 * @name Process priorities
 	 */
@@ -104,7 +104,7 @@
 	#define PROC_SLEEPING 5 /**< Waiting (uninterruptible). */
 	#define PROC_STOPPED  6 /**< Stopped.                   */
 	/**@}*/
-	
+
 	/**
 	 * @name Offsets to hard-coded fields of a process
 	 */
@@ -123,11 +123,14 @@
 
 #ifndef _ASM_FILE_
 
+
+
+
 	/**
 	 * @brief Process.
 	 */
-	struct process
-	{
+struct process
+{
 		/**
 		 * @name Hard-coded Fields
 		 */
@@ -164,7 +167,7 @@
 		mode_t umask;                  /**< User file's creation mask. */
 		dev_t tty;                     /**< Associated tty device.     */
 		/**@}*/
-		
+
 		/**
 		 * @name General information
 		 */
@@ -206,19 +209,22 @@
 		struct process *next;    /**< Next process in a list. */
 		struct process **chain;  /**< Sleeping chain.         */
 		/**@}*/
-	};
-	
+};
+
+struct process *foreground ;
+struct process *background ;
+
 	/* Forward definitions. */
-	EXTERN void bury(struct process *);
-	EXTERN void die(int);
-	EXTERN int issig(void);
-	EXTERN void pm_init(void);
-	EXTERN void sched(struct process *);
-	EXTERN void sleep(struct process **, int);
-	EXTERN void sndsig(struct process *, int);
-	EXTERN void wakeup(struct process **);
-	EXTERN void yield(void);
-	
+EXTERN void bury(struct process *);
+EXTERN void die(int);
+EXTERN int issig(void);
+EXTERN void pm_init(void);
+EXTERN void sched(struct process *);
+EXTERN void sleep(struct process **, int);
+EXTERN void sndsig(struct process *, int);
+EXTERN void wakeup(struct process **);
+EXTERN void yield(void);
+
 	/**
 	 * @name Process memory regions
 	 */
@@ -228,7 +234,7 @@
 	#define STACK(p) (&p->pregs[2]) /**< Stack region. */
 	#define HEAP(p)  (&p->pregs[3]) /**< Heap region.  */
 	/**@}*/
-	
+
 	/**
 	 * @brief Asserts if a process is running in kernel mode.
 	 * 
@@ -238,7 +244,7 @@
 	 *          otherwise.
 	 */
 	#define KERNEL_RUNNING(p) ((p)->intlvl > 1)
-	
+
 	/**
 	 * @brief Asserts if a process is the sessions leader.
 	 * 
@@ -247,7 +253,7 @@
 	 * @returns True if the process is the session leader, and false otherwise.
 	 */
 	#define IS_LEADER(p) ((p)->pgrp->pid == (p)->pid)
-	
+
 	/**
 	 * @brief Asserts if a process is valid.
 	 * 
@@ -256,8 +262,8 @@
 	 * @returns True if the process is valid, and false otherwise.
 	 */
 	#define IS_VALID(p) \
-		(((p)->state != PROC_DEAD) || ((p)->flags & (1 << PROC_NEW)))
-	
+(((p)->state != PROC_DEAD) || ((p)->flags & (1 << PROC_NEW)))
+
 	/**
 	 * @brief Asserts if a process has superuser privileges.
 	 * 
@@ -267,22 +273,21 @@
 	 *          otherwise.
 	 */
 	#define IS_SUPERUSER(p) \
-		(((p)->uid == SUPERUSER) || ((p)->euid == SUPERUSER))
-	
-	/* Forward definitions. */	
-	EXTERN void resume(struct process *);
-	EXTERN void stop(void);
-	
-	/* Forward definitions. */
-	EXTERN int shutting_down;
-	EXTERN struct process proctab[PROC_MAX];
-	EXTERN struct process *curr_proc;
-	EXTERN struct process *last_proc;
-	EXTERN pid_t next_pid;
-	EXTERN unsigned nprocs;
+(((p)->uid == SUPERUSER) || ((p)->euid == SUPERUSER))
 
-	EXTERN struct process *foreground ;
-	EXTERN struct process *background ;
+	/* Forward definitions. */	
+EXTERN void resume(struct process *);
+EXTERN void stop(void);
+
+	/* Forward definitions. */
+EXTERN int shutting_down;
+EXTERN struct process proctab[PROC_MAX];
+EXTERN struct process *curr_proc;
+EXTERN struct process *last_proc;
+EXTERN pid_t next_pid;
+EXTERN unsigned nprocs;
+
+
 
 #endif /* _ASM_FILE */
 

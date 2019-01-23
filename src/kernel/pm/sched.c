@@ -99,14 +99,14 @@ PUBLIC void yield(void)
 		 * waiting time found.
 		*/
 		
-		if (forground != NULL)
+		if (foreground != NULL)
 		{
 			next = foreground;
 			foreground = foreground->next;
 		} else if(background != NULL){
 			next = background;
 			background = background->next;
-		} else exit(-1);
+		}
 	}
 	
 	/* Switch to next process. */
